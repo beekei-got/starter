@@ -1,7 +1,6 @@
-package com.starter.core.blog;
+package com.starter.core.domain.blog;
 
-import com.starter.core.BaseEntity;
-import com.starter.core.user.UserStatus;
+import com.starter.core.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;

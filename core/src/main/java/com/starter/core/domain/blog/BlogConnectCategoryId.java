@@ -1,4 +1,4 @@
-package com.starter.core.blog;
+package com.starter.core.domain.blog;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

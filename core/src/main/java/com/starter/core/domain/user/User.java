@@ -1,6 +1,6 @@
-package com.starter.core.user;
+package com.starter.core.domain.user;
 
-import com.starter.core.BaseEntity;
+import com.starter.core.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

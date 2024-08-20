@@ -1,5 +1,7 @@
-package com.starter.core.user;
+package com.starter.core.domain.user;
 
+import com.starter.core.domain.user.AdminUser;
+import com.starter.core.domain.user.UserStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

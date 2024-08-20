@@ -1,6 +1,6 @@
-package com.starter.core.blog;
+package com.starter.core.domain.blog;
 
-import com.starter.core.BaseEntity;
+import com.starter.core.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -9,7 +9,7 @@ import org.hibernate.annotations.Comment;
 @Getter
 @Entity
 @Table(name = "blog_connect_category", uniqueConstraints = {
-    @UniqueConstraint(name = "UK_blog_connect_category_id", columnNames = { "blog_id", "user_id" })
+    @UniqueConstraint(name = "UK_blog_connect_category_id", columnNames = { "blog_id", "blog_category_id" })
 })
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

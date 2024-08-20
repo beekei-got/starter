@@ -1,5 +1,8 @@
-package com.starter.core.user;
+package com.starter.core.domain.user;
 
+import com.starter.core.domain.user.ClientUser;
+import com.starter.core.domain.user.Gender;
+import com.starter.core.domain.user.UserStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

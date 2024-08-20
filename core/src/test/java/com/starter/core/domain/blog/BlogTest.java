@@ -1,5 +1,7 @@
-package com.starter.core.blog;
+package com.starter.core.domain.blog;
 
+import com.starter.core.domain.blog.Blog;
+import com.starter.core.domain.blog.BlogStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

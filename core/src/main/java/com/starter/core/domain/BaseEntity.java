@@ -1,4 +1,4 @@
-package com.starter.core;
+package com.starter.core.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

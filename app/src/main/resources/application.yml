@@ -32,9 +32,6 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
     static-path-pattern: /resources/**
-#    servlet:
-#      path: /view/
-
 
 springdoc:
   packages-to-scan: com.starter.app

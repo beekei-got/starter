@@ -1,4 +1,4 @@
-package com.starter.core.user;
+package com.starter.core.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
