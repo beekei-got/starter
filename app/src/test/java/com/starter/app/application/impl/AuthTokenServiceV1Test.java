@@ -1,6 +1,7 @@
 package com.starter.app.application.impl;
 
 import com.starter.app.application.ServiceTest;
+import com.starter.app.application.dto.AuthTokenDTO;
 import com.starter.core.domain.auth.AuthToken;
 import com.starter.core.domain.auth.AuthTokenDomainService;
 import com.starter.core.domain.auth.AuthTokenMock;
@@ -33,10 +34,12 @@ class AuthTokenServiceV1Test extends ServiceTest {
         given(authTokenDomainService.getAuthToken(any(UUID.class))).willReturn(authToken);
         willDoNothing().given(authTokenDomainService).confirmPossibleIssue(any(AuthToken.class));
 
-        authTokenServiceV1.issueAuthToken(UUID.randomUUID());
+        AuthTokenDTO authTokenDTO = authTokenServiceV1.issueAuthToken(UUID.randomUUID());
 
         assertThat(authToken.isIssued()).isTrue();
         assertThat(authToken.getIssuedDatetime()).isNotNull();
+        assertThat(authTokenDTO.getAccessToken()).isEqualTo(authToken.getAccessToken());
+        assertThat(authTokenDTO.getRefreshToken()).isEqualTo(authToken.getRefreshToken());
     }
 
 }
