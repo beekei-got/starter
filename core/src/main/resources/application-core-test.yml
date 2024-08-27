@@ -1,0 +1,23 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/starter?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+    hikari:
+      maximum-pool-size: 100
+      connection-timeout: 60000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: true
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  mustache:
+    check-template-location: false
