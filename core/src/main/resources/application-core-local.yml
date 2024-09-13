@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: starter
   config:
     activate:
       on-profile: local

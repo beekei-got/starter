@@ -1,6 +1,5 @@
 package com.starter.core.domain.blog;
 
-import com.starter.core.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -14,7 +13,7 @@ import org.hibernate.annotations.Comment;
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BlogConnectCategory extends BaseEntity {
+public class BlogConnectCategory {
 
     @EmbeddedId
     private BlogConnectCategoryId id;
