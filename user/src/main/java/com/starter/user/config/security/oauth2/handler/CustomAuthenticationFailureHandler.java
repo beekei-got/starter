@@ -1,4 +1,4 @@
-package com.starter.user.config.security.aouth2.handler;
+package com.starter.user.config.security.oauth2.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

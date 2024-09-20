@@ -12,6 +12,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -38,6 +39,7 @@ public class GlobalExceptionHandler {
      * 잘못된 API 요청 Exception
      */
     @ExceptionHandler(value = {
+        NoHandlerFoundException.class,
         MethodArgumentNotValidException.class,
         MethodArgumentTypeMismatchException.class,
         HttpMessageNotReadableException.class,

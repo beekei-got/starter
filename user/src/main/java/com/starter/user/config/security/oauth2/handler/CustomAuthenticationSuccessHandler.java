@@ -1,7 +1,7 @@
-package com.starter.user.config.security.aouth2.handler;
+package com.starter.user.config.security.oauth2.handler;
 
 import com.starter.user.config.security.TokenProvider;
-import com.starter.user.config.security.aouth2.service.CustomOAuth2User;
+import com.starter.user.config.security.oauth2.service.CustomOAuth2User;
 import com.starter.user.domain.auth.service.AuthTokenDomainService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +22,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-
         String accessToken = tokenProvider.createAccessToken(String.valueOf(customOAuth2User.getId()), customOAuth2User.getName(), customOAuth2User.getAuthorities());
         LocalDateTime accessTokenExpiredDatetime = tokenProvider.getAccessTokenExpiredDatetime(accessToken);
         String refreshToken = tokenProvider.createRefreshToken(String.valueOf(customOAuth2User.getId()), customOAuth2User.getName(), customOAuth2User.getAuthorities());
@@ -32,7 +31,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             accessToken, accessTokenExpiredDatetime,
             refreshToken, refreshTokenExpiredDatetime);
 
-//        response.sendRedirect("/auth/token?authTokenId=" + authTokenId);
+        String appRedirectUri = (String) customOAuth2User.getAdditionalParameters().get("appRedirectUri");
+        response.sendRedirect(appRedirectUri + "?authTokenId=" + authTokenId);
     }
 
 

@@ -1,4 +1,4 @@
-package com.starter.user.config.security.aouth2.service;
+package com.starter.user.config.security.oauth2.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +20,7 @@ public class CustomOAuth2User implements OAuth2User, Serializable {
     private final Set<GrantedAuthority> authorities;
     private final String registrationId;
     private final Map<String, Object> attributes;
+    private final Map<String, Object> additionalParameters;
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -28,7 +29,7 @@ public class CustomOAuth2User implements OAuth2User, Serializable {
 
     @Override
     public Set<GrantedAuthority> getAuthorities() {
-        return authorities;
+        return this.authorities;
     }
 
     @Override

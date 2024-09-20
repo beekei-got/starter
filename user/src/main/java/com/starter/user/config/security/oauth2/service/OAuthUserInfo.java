@@ -1,4 +1,4 @@
-package com.starter.user.config.security.aouth2.service;
+package com.starter.user.config.security.oauth2.service;
 
 import lombok.AccessLevel;
 import lombok.Builder;

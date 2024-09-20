@@ -1,4 +1,4 @@
-package com.starter.user.config.security.aouth2.service;
+package com.starter.user.config.security.oauth2.service;
 
 import com.starter.user.domain.user.Gender;
 import com.starter.user.domain.user.UserRole;
@@ -32,6 +32,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2UserService<OAuth2UserRequest, OAuth2User> service = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = service.loadUser(userRequest);
 
+
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
@@ -59,12 +60,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             .map(role -> (GrantedAuthority) () -> role)
             .collect(Collectors.toSet());
 
-        return new CustomOAuth2User(clientUser.getId(), clientUser.getEmail(), authorities, oAuthUserInfo.getRegistrationId(), attributes);
+        Map<String, Object> additionalParameters = userRequest.getAdditionalParameters();
+        return new CustomOAuth2User(clientUser.getId(), clientUser.getEmail(), authorities, oAuthUserInfo.getRegistrationId(), attributes, additionalParameters);
     }
 
     private OAuthUserInfo convertGoogleUser(Map<String, Object> attributes) {
         return OAuthUserInfo.builder()
-            .registrationId("GOOGLE")
+            .registrationId("google")
             .attributes(attributes)
             .name(String.valueOf(attributes.get("family_name")) + attributes.get("given_name"))
             .nickname(String.valueOf(attributes.get("name")))
@@ -77,7 +79,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
         return OAuthUserInfo.builder()
-            .registrationId("KAKAO")
+            .registrationId("kakao")
             .attributes(attributes)
             .name(String.valueOf(kakaoProfile.get("nickname")))
             .email(String.valueOf(kakaoAccount.get("email")))
@@ -89,7 +91,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private OAuthUserInfo convertNaverUser(Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         return OAuthUserInfo.builder()
-            .registrationId("NAVER")
+            .registrationId("naver")
             .attributes(attributes)
             .name(String.valueOf(response.get("nickname")))
             .email(String.valueOf(response.get("email")))
