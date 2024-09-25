@@ -4,6 +4,6 @@
     <title>test</title>
 </head>
 <body>
-<a href="/user/oauth2/authorization/google?appRedirectUri=${appRedirectUri}">구글 로그인</a>
+<a href="/oauth2/authorization/google?appRedirectUri=${appRedirectUri}">구글 로그인</a>
 </body>
 </html>

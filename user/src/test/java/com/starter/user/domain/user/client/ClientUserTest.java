@@ -1,8 +1,10 @@
-package com.starter.user.domain.clientUser;
+package com.starter.user.domain.user.client;
 
+import com.starter.user.domain.user.ClientUserMock;
 import com.starter.user.domain.user.Gender;
 import com.starter.user.domain.user.UserStatus;
 import com.starter.user.domain.user.client.ClientUser;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -13,14 +15,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ClientUserTest {
 
     @Test
-    void 사용자_회원_생성() {
+    @DisplayName("사용자 회원 생성")
+    void createUser() {
         String email = "test@test.com";
         String name = "홍길동";
         String nickname = "테스터";
         Gender gender = Gender.MALE;
         LocalDate birthday = LocalDate.of(1993, 10, 20);
         String phoneNumber = "01011112222";
-        ClientUser clientUser = ClientUser.createClientUser(email, name, nickname, gender, birthday, phoneNumber);
+        ClientUser clientUser = ClientUser.createUser(email, name, nickname, gender, birthday, phoneNumber);
 
         assertThat(clientUser.getEmail()).isEqualTo(email);
         assertThat(clientUser.getName()).isEqualTo(name);
@@ -30,7 +33,6 @@ class ClientUserTest {
         assertThat(clientUser.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(clientUser.getStatus()).isEqualTo(UserStatus.ACTIVE);
     }
-
 
 
 }

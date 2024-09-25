@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.springframework.data.domain.Page;
 
 @Getter
-@AllArgsConstructor
 public class PagingResponseDTO {
 
     protected final int currentPage;
@@ -19,4 +18,5 @@ public class PagingResponseDTO {
         this.totalPage = page.getTotalPages();
         this.totalCount = page.getTotalElements();
     }
+
 }

@@ -104,6 +104,16 @@ public class QuerydslBase<T> {
         return this;
     }
 
+    public <C> QuerydslBase<T> whereNotIn(Collection<C> value, SimpleExpression<C> column) {
+        this.jpaQuery.where(column.notIn(value));
+        return this;
+    }
+
+    public <C> QuerydslBase<T> optionalWhereNotIn(Collection<C> value, SimpleExpression<C> column) {
+        Optional.ofNullable(value).ifPresent(v -> this.whereNotIn(v, column));
+        return this;
+    }
+
     public QuerydslBase<T> like(String value, StringPath column) {
         this.jpaQuery.where(column.contains(value));
         return this;

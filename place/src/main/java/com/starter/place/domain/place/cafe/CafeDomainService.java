@@ -1,7 +1,7 @@
 package com.starter.place.domain.place.cafe;
 
-import com.starter.core.config.payload.exception.DuplicatedDataException;
-import com.starter.core.config.payload.exception.ExceptionMessageType;
+import com.starter.place.config.payload.exception.DuplicatedDataException;
+import com.starter.place.config.payload.exception.ExceptionMessageType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

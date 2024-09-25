@@ -1,10 +1,14 @@
 package com.starter.user.domain.user;
 
+import com.starter.user.config.payload.exception.ApiException;
+import com.starter.user.config.payload.exception.ExceptionMessageType;
+import com.starter.user.config.payload.exception.NotAccessDataException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum UserStatus {
 
     ACTIVE("활성화"),

@@ -34,7 +34,7 @@ public class AdminUser extends User {
         this.password = password;
     }
 
-    public static AdminUser createAdminUser(String loginId, String password, String name) {
+    public static AdminUser createUser(String loginId, String password, String name) {
         return new AdminUser(loginId, password, name);
     }
 

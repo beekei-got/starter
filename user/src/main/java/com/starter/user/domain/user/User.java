@@ -25,7 +25,7 @@ public abstract class User extends EntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("고유번호")
     @Column(name = "id")
-    private Long id;
+    protected Long id;
 
     @Enumerated(EnumType.STRING)
     @Comment("회원 유형")
@@ -45,6 +45,14 @@ public abstract class User extends EntityBase {
         this.type = type;
         this.name = name;
         this.status = UserStatus.ACTIVE;
+    }
+
+    public void resign() {
+        this.status = UserStatus.RESIGN;
+    }
+
+    public void block() {
+        this.status = UserStatus.BLOCK;
     }
 
 }

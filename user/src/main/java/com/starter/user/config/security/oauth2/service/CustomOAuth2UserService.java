@@ -1,9 +1,15 @@
 package com.starter.user.config.security.oauth2.service;
 
+import com.starter.user.application.dto.SaveClientUserParameterDTO;
+import com.starter.user.config.payload.exception.ExceptionMessageType;
+import com.starter.user.config.payload.exception.NotAccessDataException;
+import com.starter.user.config.payload.exception.NotExistDataException;
 import com.starter.user.domain.user.Gender;
 import com.starter.user.domain.user.UserRole;
+import com.starter.user.domain.user.UserStatus;
 import com.starter.user.domain.user.client.ClientUser;
 import com.starter.user.domain.user.client.ClientUserRepository;
+import com.starter.user.domain.user.client.service.ClientUserDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -24,7 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final ClientUserRepository clientUserRepository;
+    private final ClientUserDomainService clientUserDomainService;
 
     @Transactional
     @Override
@@ -43,17 +49,16 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             default -> throw new OAuth2AuthenticationException(new OAuth2Error("100"));
         };
 
-        ClientUser clientUser = clientUserRepository.findByEmail(oAuthUserInfo.getEmail())
-            .orElseGet(() -> clientUserRepository.saveAndFlush(ClientUser.createClientUser(
-                oAuthUserInfo.getEmail(),
-                oAuthUserInfo.getName(),
-                oAuthUserInfo.getNickname(),
-                Optional.ofNullable(oAuthUserInfo.getGender())
+        ClientUser clientUser = clientUserDomainService.saveClientUser(SaveClientUserParameterDTO.builder()
+                .email(oAuthUserInfo.getEmail())
+                .userName(oAuthUserInfo.getName())
+                .nickname(oAuthUserInfo.getNickname())
+                .userGender(Optional.ofNullable(oAuthUserInfo.getGender())
                     .map(Gender::valueOf)
-                    .orElse(null),
-                oAuthUserInfo.getBirthday(),
-                oAuthUserInfo.getPhoneNumber()
-            )));
+                    .orElse(null))
+                .userBirthday(oAuthUserInfo.getBirthday())
+                .phoneNumber(oAuthUserInfo.getPhoneNumber())
+            .build());
 
         Set<GrantedAuthority> authorities = clientUser.getType().getRoles().stream()
             .map(UserRole::getKey)
@@ -98,6 +103,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             .profileImageUrl(String.valueOf(response.get("profile_image")))
             .gender(String.valueOf(response.get("gender")))
             .build();
+    }
+
+    public void checkAccessClientUser(long userId) {
+        clientUserDomainService.checkAccessClientUser(userId);
     }
 
 }

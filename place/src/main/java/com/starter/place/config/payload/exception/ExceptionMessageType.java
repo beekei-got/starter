@@ -19,8 +19,6 @@ public enum ExceptionMessageType {
     DUPLICATED_PHONE_NUMBER("중복된 휴대폰 번호 입니다."),
     DUPLICATED_CI("중복된 CI 입니다."),
 
-
-
     DUPLICATED_CAFE("중복된 카페입니다."),
     ;
 

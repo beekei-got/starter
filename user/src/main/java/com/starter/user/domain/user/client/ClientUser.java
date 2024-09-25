@@ -2,6 +2,7 @@ package com.starter.user.domain.user.client;
 
 import com.starter.user.domain.user.Gender;
 import com.starter.user.domain.user.User;
+import com.starter.user.domain.user.UserStatus;
 import com.starter.user.domain.user.UserType;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -56,8 +57,8 @@ public class ClientUser extends User {
         this.phoneNumber = phoneNumber;
     }
 
-    public static ClientUser createClientUser(String email, String name, String nickname,
-                                              @Nullable Gender gender, @Nullable LocalDate birthday, @Nullable String phoneNumber) {
+    public static ClientUser createUser(String email, String name, String nickname,
+                                        @Nullable Gender gender, @Nullable LocalDate birthday, @Nullable String phoneNumber) {
         return new ClientUser(email, name, nickname, gender, birthday, phoneNumber);
     }
 

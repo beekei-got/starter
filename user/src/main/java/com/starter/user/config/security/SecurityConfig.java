@@ -9,12 +9,14 @@ import com.starter.user.domain.auth.service.AuthTokenDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -40,8 +42,7 @@ public class SecurityConfig {
             "/BOOT-INF/**",
             "/api/docs",
             "/api/docs/**",
-            "/api/swagger-ui/**",
-            "/user/login/**"
+            "/api/swagger-ui/**"
         );
     }
 
@@ -63,7 +64,6 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
             .cors(c -> c.configurationSource(corsConfigurationSource()))
             .headers(hc -> hc.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-            .authorizeHttpRequests(ar -> ar.anyRequest().permitAll())
             .oauth2Login(oauth2Login -> oauth2Login
                 .authorizationEndpoint(config ->
                     config.authorizationRequestResolver(
@@ -73,6 +73,17 @@ public class SecurityConfig {
                 .successHandler(new CustomAuthenticationSuccessHandler(this.tokenProvider, this.authTokenDomainService))
                 .failureHandler(new CustomAuthenticationFailureHandler())
                 .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(this.customOAuth2UserService)))
+            .authorizeHttpRequests(ar -> ar
+                .requestMatchers(HttpMethod.GET, TokenWhiteList.getWhitelistByMethod(HttpMethod.GET)).permitAll()
+                .requestMatchers(HttpMethod.POST, TokenWhiteList.getWhitelistByMethod(HttpMethod.POST)).permitAll()
+                .requestMatchers(HttpMethod.PUT, TokenWhiteList.getWhitelistByMethod(HttpMethod.PUT)).permitAll()
+                .requestMatchers(HttpMethod.DELETE, TokenWhiteList.getWhitelistByMethod(HttpMethod.DELETE)).permitAll()
+                .anyRequest().authenticated())
+            .addFilterAfter(new TokenAuthenticationFilter(this.tokenProvider, this.customOAuth2UserService),
+                UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(eh -> eh
+                .authenticationEntryPoint(new TokenUnauthorizedHandler())
+                .accessDeniedHandler(new TokenAccessDeniedHandler()))
             .build();
     }
 
