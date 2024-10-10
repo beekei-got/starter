@@ -1,4 +1,4 @@
 rootProject.name = 'starter'
 include 'core'
-include 'user'
-include 'place'
+include 'app'
+
