@@ -1,14 +1,10 @@
 package com.starter.user.config.security.oauth2.service;
 
 import com.starter.user.application.dto.SaveClientUserParameterDTO;
-import com.starter.user.config.payload.exception.ExceptionMessageType;
-import com.starter.user.config.payload.exception.NotAccessDataException;
-import com.starter.user.config.payload.exception.NotExistDataException;
 import com.starter.user.domain.user.Gender;
 import com.starter.user.domain.user.UserRole;
-import com.starter.user.domain.user.UserStatus;
+import com.starter.user.domain.user.admin.service.AdminUserDomainService;
 import com.starter.user.domain.user.client.ClientUser;
-import com.starter.user.domain.user.client.ClientUserRepository;
 import com.starter.user.domain.user.client.service.ClientUserDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -103,10 +99,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             .profileImageUrl(String.valueOf(response.get("profile_image")))
             .gender(String.valueOf(response.get("gender")))
             .build();
-    }
-
-    public void checkAccessClientUser(long userId) {
-        clientUserDomainService.checkAccessClientUser(userId);
     }
 
 }

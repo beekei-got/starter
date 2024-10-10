@@ -20,8 +20,8 @@ public class AuthToken extends EntityBase {
 
     @Comment("고유번호")
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name="uuid2", strategy = "uuid2")
+//    @GeneratedValue(generator = "uuid2")
+//    @GenericGenerator(name="uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)", length = 16)
     protected UUID id;
 
@@ -57,11 +57,13 @@ public class AuthToken extends EntityBase {
     @Column(name = "issued_datetime", insertable = false)
     private LocalDateTime issuedDatetime;
 
-    public static AuthToken createToken(long userId,
+    public static AuthToken createToken(UUID authTokenId,
+                                        long userId,
                                         String accessToken, LocalDateTime accessTokenExpiredDatetime,
                                         String refreshToken, LocalDateTime refreshTokenExpiredDatetime,
                                         int issueExpiredMinute) {
         return  AuthToken.builder()
+            .id(authTokenId)
             .userId(userId)
             .accessToken(accessToken)
             .accessTokenExpiredDatetime(accessTokenExpiredDatetime)

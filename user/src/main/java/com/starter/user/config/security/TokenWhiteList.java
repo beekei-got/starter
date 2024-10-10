@@ -11,8 +11,8 @@ import java.util.Set;
 public class TokenWhiteList {
 
     private static final List<Path> WHITE_LIST = List.of(
-        new Path("/api/v*/user/client/signin", HttpMethod.GET),
-        new Path("/api/v*/token/auth", HttpMethod.GET)
+        new Path("/user/client/sign/in", HttpMethod.GET), // 사용자 회원 로그인 페이지
+        new Path("/api/v*/token/auth", HttpMethod.POST) // 인증 토큰 발급
     );
 
     public static String[] getWhitelistByMethod(HttpMethod method) {

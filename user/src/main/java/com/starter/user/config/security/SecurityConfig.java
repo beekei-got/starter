@@ -1,16 +1,22 @@
 package com.starter.user.config.security;
 
+import com.starter.user.config.security.filter.TokenAuthenticationFilter;
+import com.starter.user.config.security.handler.TokenAccessDeniedHandler;
+import com.starter.user.config.security.handler.TokenUnauthorizedHandler;
 import com.starter.user.config.security.oauth2.filter.CustomOAuth2AccessTokenResponseClient;
 import com.starter.user.config.security.oauth2.filter.CustomAuthorizationRequestResolver;
 import com.starter.user.config.security.oauth2.handler.CustomAuthenticationFailureHandler;
 import com.starter.user.config.security.oauth2.handler.CustomAuthenticationSuccessHandler;
 import com.starter.user.config.security.oauth2.service.CustomOAuth2UserService;
 import com.starter.user.domain.auth.service.AuthTokenDomainService;
+import com.starter.user.domain.user.admin.service.AdminUserDomainService;
+import com.starter.user.domain.user.client.service.ClientUserDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -21,6 +27,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+@EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -29,6 +36,9 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final AuthTokenDomainService authTokenDomainService;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final ClientUserDomainService clientUserDomainService;
+    private final AdminUserDomainService adminUserDomainService;
+
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -42,7 +52,8 @@ public class SecurityConfig {
             "/BOOT-INF/**",
             "/api/docs",
             "/api/docs/**",
-            "/api/swagger-ui/**"
+            "/api/swagger-ui/**",
+            "/WEB-INF/**"
         );
     }
 
@@ -79,11 +90,12 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, TokenWhiteList.getWhitelistByMethod(HttpMethod.PUT)).permitAll()
                 .requestMatchers(HttpMethod.DELETE, TokenWhiteList.getWhitelistByMethod(HttpMethod.DELETE)).permitAll()
                 .anyRequest().authenticated())
-            .addFilterAfter(new TokenAuthenticationFilter(this.tokenProvider, this.customOAuth2UserService),
-                UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(eh -> eh
+            .exceptionHandling(handling -> handling
                 .authenticationEntryPoint(new TokenUnauthorizedHandler())
                 .accessDeniedHandler(new TokenAccessDeniedHandler()))
+            .addFilterBefore(
+                new TokenAuthenticationFilter(this.tokenProvider, this.clientUserDomainService, this.adminUserDomainService),
+                UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 

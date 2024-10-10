@@ -4,14 +4,11 @@ import com.starter.user.application.dto.SaveClientUserParameterDTO;
 import com.starter.user.config.payload.exception.ExceptionMessageType;
 import com.starter.user.config.payload.exception.NotAccessDataException;
 import com.starter.user.config.payload.exception.NotExistDataException;
-import com.starter.user.domain.user.Gender;
 import com.starter.user.domain.user.UserStatus;
 import com.starter.user.domain.user.client.ClientUser;
 import com.starter.user.domain.user.client.ClientUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

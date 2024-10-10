@@ -21,13 +21,24 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+        UUID authTokenId = UUID.randomUUID();
         CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        System.out.println("customOAuth2User.getId() : " + customOAuth2User.getId());
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(customOAuth2User.getId()), customOAuth2User.getName(), customOAuth2User.getAuthorities());
+        String accessToken = tokenProvider.issueAccessToken(
+            authTokenId,
+            TokenProvider.SubjectType.CLIENT_USER_TOKEN,
+            customOAuth2User.getId(),
+            customOAuth2User.getName(),
+            customOAuth2User.getAuthorities());
         LocalDateTime accessTokenExpiredDatetime = tokenProvider.getAccessTokenExpiredDatetime(accessToken);
-        String refreshToken = tokenProvider.createRefreshToken(String.valueOf(customOAuth2User.getId()), customOAuth2User.getName(), customOAuth2User.getAuthorities());
+        String refreshToken = tokenProvider.issueRefreshToken(
+            authTokenId,
+            TokenProvider.SubjectType.CLIENT_USER_TOKEN,
+            customOAuth2User.getId(),
+            customOAuth2User.getName(),
+            customOAuth2User.getAuthorities());
         LocalDateTime refreshTokenExpiredDatetime = tokenProvider.getRefreshTokenExpiredDatetime(refreshToken);
-        UUID authTokenId = authTokenDomainService.saveAuthToken(
+        authTokenDomainService.saveAuthToken(
+            authTokenId,
             customOAuth2User.getId(),
             accessToken, accessTokenExpiredDatetime,
             refreshToken, refreshTokenExpiredDatetime);

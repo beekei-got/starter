@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-	group = 'org.starter'
+	group = 'com.starter'
 	version = '0.0.1'
 
 	java {

@@ -18,10 +18,12 @@ public class AuthTokenDomainService {
 
     private final AuthTokenRepository authTokenRepository;
 
-    public UUID saveAuthToken(long userId,
+    public UUID saveAuthToken(UUID authTokenId,
+                              long userId,
                               String accessToken, LocalDateTime accessTokenExpiredDatetime,
                               String refreshToken, LocalDateTime refreshTokenExpiredDatetime) {
         AuthToken authToken = authTokenRepository.saveAndFlush(AuthToken.createToken(
+            authTokenId,
             userId,
             accessToken, accessTokenExpiredDatetime,
             refreshToken, refreshTokenExpiredDatetime,

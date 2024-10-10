@@ -41,7 +41,7 @@ public abstract class User extends EntityBase {
     @Column(name = "user_status", length = 50, nullable = false)
     protected UserStatus status;
 
-    public User(UserType type, String name) {
+    protected User(UserType type, String name) {
         this.type = type;
         this.name = name;
         this.status = UserStatus.ACTIVE;
