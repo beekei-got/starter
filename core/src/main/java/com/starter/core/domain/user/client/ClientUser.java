@@ -3,13 +3,13 @@ package com.starter.core.domain.user.client;
 import com.starter.core.domain.user.Gender;
 import com.starter.core.domain.user.User;
 import com.starter.core.domain.user.UserType;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 

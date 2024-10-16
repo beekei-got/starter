@@ -8,13 +8,17 @@ import com.starter.app.config.security.oauth2.filter.CustomAuthorizationRequestR
 import com.starter.app.config.security.oauth2.handler.CustomAuthenticationFailureHandler;
 import com.starter.app.config.security.oauth2.handler.CustomAuthenticationSuccessHandler;
 import com.starter.app.config.security.oauth2.service.CustomOAuth2UserService;
+import com.starter.app.config.security.token.AccessTokenRoleValidator;
+import com.starter.app.config.security.token.TokenProvider;
+import com.starter.app.config.security.token.TokenRole;
 import com.starter.core.domain.auth.service.AuthTokenDomainService;
 import com.starter.core.domain.user.client.service.ClientUserDomainService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.Advisor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authorization.method.AuthorizationManagerBeforeMethodInterceptor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -65,6 +69,10 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+    @Bean
+    public Advisor preAuthorize(AccessTokenRoleValidator accessTokenRoleValidator) { //2
+        return AuthorizationManagerBeforeMethodInterceptor.preAuthorize(accessTokenRoleValidator);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -81,10 +89,11 @@ public class SecurityConfig {
                 .failureHandler(new CustomAuthenticationFailureHandler())
                 .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(this.customOAuth2UserService)))
             .authorizeHttpRequests(ar -> ar
-                .requestMatchers(HttpMethod.GET, TokenWhiteList.getWhitelistByMethod(HttpMethod.GET)).permitAll()
-                .requestMatchers(HttpMethod.POST, TokenWhiteList.getWhitelistByMethod(HttpMethod.POST)).permitAll()
-                .requestMatchers(HttpMethod.PUT, TokenWhiteList.getWhitelistByMethod(HttpMethod.PUT)).permitAll()
-                .requestMatchers(HttpMethod.DELETE, TokenWhiteList.getWhitelistByMethod(HttpMethod.DELETE)).permitAll()
+                .requestMatchers(HttpMethod.GET, SecurityWhiteList.getWhitelistByMethod(HttpMethod.GET)).permitAll()
+                .requestMatchers(HttpMethod.POST, SecurityWhiteList.getWhitelistByMethod(HttpMethod.POST)).permitAll()
+                .requestMatchers(HttpMethod.PUT, SecurityWhiteList.getWhitelistByMethod(HttpMethod.PUT)).permitAll()
+                .requestMatchers(HttpMethod.DELETE, SecurityWhiteList.getWhitelistByMethod(HttpMethod.DELETE)).permitAll()
+//                .anyRequest().hasAnyRole(TokenRole.CLIENT_USER.getRole(), TokenRole.BUSINESS_USER.getRole())
                 .anyRequest().authenticated())
             .exceptionHandling(handling -> handling
                 .authenticationEntryPoint(new TokenUnauthorizedHandler())

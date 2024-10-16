@@ -1,7 +1,7 @@
 package com.starter.app.config.security.oauth2.service;
 
 import com.starter.core.domain.user.Gender;
-import com.starter.core.domain.user.UserRole;
+import com.starter.app.config.security.token.TokenRole;
 import com.starter.core.domain.user.client.ClientUser;
 import com.starter.core.domain.user.client.service.ClientUserDomainService;
 import com.starter.core.domain.user.client.service.dto.SaveClientUserParameterDTO;
@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -32,7 +33,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> service = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = service.loadUser(userRequest);
-
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         Map<String, Object> attributes = oAuth2User.getAttributes();
@@ -55,10 +55,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .phoneNumber(oAuthUserInfo.getPhoneNumber())
             .build());
 
-        Set<GrantedAuthority> authorities = clientUser.getType().getRoles().stream()
-            .map(UserRole::getKey)
-            .map(role -> (GrantedAuthority) () -> role)
-            .collect(Collectors.toSet());
+        Set<GrantedAuthority> authorities = Optional.of(clientUser.getUserType())
+            .map(TokenRole::userTypeOf)
+            .map(roles -> roles.stream().map(TokenRole::getAuthority).collect(Collectors.toSet()))
+            .orElseGet(HashSet::new);
 
         Map<String, Object> additionalParameters = userRequest.getAdditionalParameters();
         return new CustomOAuth2User(clientUser.getId(), clientUser.getEmail(), authorities, oAuthUserInfo.getRegistrationId(), attributes, additionalParameters);

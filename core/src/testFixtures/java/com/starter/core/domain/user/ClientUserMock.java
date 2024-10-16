@@ -1,6 +1,7 @@
 package com.starter.core.domain.user;
 
-import com.starter.user.domain.user.client.ClientUser;
+
+import com.starter.core.domain.user.client.ClientUser;
 
 import java.time.LocalDate;
 

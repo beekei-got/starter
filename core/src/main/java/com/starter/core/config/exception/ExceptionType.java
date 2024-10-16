@@ -16,6 +16,7 @@ public enum ExceptionType {
     FORBIDDEN_TOKEN(HttpStatus.FORBIDDEN,                       "40300", "권한 없음"),
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,     "50000", "알수없는 오류"),
+    UNSUPPORTED_TYPE(HttpStatus.BAD_GATEWAY,                    "50101", "지원하지 않는 유형"),
     NOT_EXIST_DATA(HttpStatus.BAD_GATEWAY,                      "50201", "존재하지 않는 데이터"),
     INVALID_DATA(HttpStatus.BAD_GATEWAY,                        "50202", "유효하지 않는 데이터"),
     NOT_ACCESS_DATA(HttpStatus.BAD_GATEWAY,                     "50203", "허용되지 않은 데이터"),

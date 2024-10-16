@@ -52,9 +52,9 @@ springdoc:
     disable-swagger-default-url: false
   model-and-view-allowed: true
   group-configs:
-    - group: sign
+    - group: auth
       paths-to-match:
-        - /sign/**
+        - /auth/**
     - group: V1
       paths-to-match:
         - /api/v1/**

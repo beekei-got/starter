@@ -23,9 +23,9 @@ public class ClientUserDomainService {
 
     public void checkAccessClientUser(long userId) {
         ClientUser clientUser = getClientUser(userId);
-        if (clientUser.getStatus().equals(UserStatus.RESIGN))
+        if (clientUser.getUserStatus().equals(UserStatus.RESIGN))
             throw new NotAccessDataException(ExceptionMessageType.RESIGN_USER);
-        if (clientUser.getStatus().equals(UserStatus.BLOCK))
+        if (clientUser.getUserStatus().equals(UserStatus.BLOCK))
             throw new NotAccessDataException(ExceptionMessageType.BLOCK_USER);
     }
 

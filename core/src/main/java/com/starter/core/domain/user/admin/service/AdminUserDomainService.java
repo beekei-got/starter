@@ -22,9 +22,9 @@ public class AdminUserDomainService {
 
     public void checkAccessAdminUser(long userId) {
         AdminUser adminUser = getAdminUser(userId);
-        if (adminUser.getStatus().equals(UserStatus.RESIGN))
+        if (adminUser.getUserStatus().equals(UserStatus.RESIGN))
             throw new NotAccessDataException(ExceptionMessageType.RESIGN_USER);
-        if (adminUser.getStatus().equals(UserStatus.BLOCK))
+        if (adminUser.getUserStatus().equals(UserStatus.BLOCK))
             throw new NotAccessDataException(ExceptionMessageType.BLOCK_USER);
     }
 

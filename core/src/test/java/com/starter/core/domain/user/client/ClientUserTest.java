@@ -2,7 +2,7 @@ package com.starter.core.domain.user.client;
 
 import com.starter.core.domain.user.Gender;
 import com.starter.core.domain.user.UserStatus;
-import com.starter.core.domain.user.client.ClientUser;
+import com.starter.core.domain.user.UserType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,13 +24,14 @@ class ClientUserTest {
         String phoneNumber = "01011112222";
         ClientUser clientUser = ClientUser.createUser(email, name, nickname, gender, birthday, phoneNumber);
 
+        assertThat(clientUser.getUserType()).isEqualTo(UserType.CLIENT);
+        assertThat(clientUser.getUserStatus()).isEqualTo(UserStatus.ACTIVE);
         assertThat(clientUser.getEmail()).isEqualTo(email);
-        assertThat(clientUser.getName()).isEqualTo(name);
+        assertThat(clientUser.getUserName()).isEqualTo(name);
         assertThat(clientUser.getNickname()).isEqualTo(nickname);
         assertThat(clientUser.getGender()).isEqualTo(gender);
         assertThat(clientUser.getBirthday()).isEqualTo(birthday);
         assertThat(clientUser.getPhoneNumber()).isEqualTo(phoneNumber);
-        assertThat(clientUser.getStatus()).isEqualTo(UserStatus.ACTIVE);
     }
 
 

@@ -1,6 +1,5 @@
 package com.starter.core.domain.user;
 
-import com.starter.core.domain.user.UserStatus;
 import com.starter.core.domain.user.client.ClientUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,7 @@ class UserTest {
         ClientUser clientUser = ClientUserMock.createUser();
         clientUser.resign();
 
-        assertThat(clientUser.getStatus()).isEqualTo(UserStatus.RESIGN);
+        assertThat(clientUser.getUserStatus()).isEqualTo(UserStatus.RESIGN);
     }
 
     @Test
@@ -24,7 +23,7 @@ class UserTest {
         ClientUser clientUser = ClientUserMock.createUser();
         clientUser.block();
 
-        assertThat(clientUser.getStatus()).isEqualTo(UserStatus.BLOCK);
+        assertThat(clientUser.getUserStatus()).isEqualTo(UserStatus.BLOCK);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.starter.core.domain.user.admin;
 
 import com.starter.core.domain.user.UserStatus;
-import com.starter.core.domain.user.admin.AdminUser;
+import com.starter.core.domain.user.UserType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,10 +17,11 @@ class AdminUserTest {
         String name = "홍길동";
         AdminUser adminUser = AdminUser.createUser(loginId, password, name);
 
+        assertThat(adminUser.getUserType()).isEqualTo(UserType.ADMIN);
+        assertThat(adminUser.getUserStatus()).isEqualTo(UserStatus.ACTIVE);
         assertThat(adminUser.getLoginId()).isEqualTo(loginId);
         assertThat(adminUser.getPassword()).isEqualTo(password);
-        assertThat(adminUser.getName()).isEqualTo(name);
-        assertThat(adminUser.getStatus()).isEqualTo(UserStatus.ACTIVE);
+        assertThat(adminUser.getUserName()).isEqualTo(name);
     }
 
 }

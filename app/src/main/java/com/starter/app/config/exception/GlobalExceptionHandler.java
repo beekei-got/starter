@@ -3,9 +3,11 @@ package com.starter.app.config.exception;
 import com.starter.core.config.exception.ApiException;
 import com.starter.app.config.payload.ApiResponse;
 import com.starter.core.config.exception.ExceptionType;
+import com.starter.core.config.exception.UnauthorizedTokenException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,7 +31,6 @@ public class GlobalExceptionHandler {
         HttpRequestMethodNotSupportedException.class
     })
     public ResponseEntity<ApiResponse<?>> unSupportedMediaTypeExceptionHandler(Exception e) {
-        e.printStackTrace();
         final ExceptionType exceptionType = ExceptionType.UNSUPPORTED_MEDIA_TYPE;
         return ResponseEntity
             .status(exceptionType.getHttpStatus())
@@ -63,6 +64,26 @@ public class GlobalExceptionHandler {
                 .status(exceptionType.getHttpStatus())
                 .body(ApiResponse.exception(exceptionType));
         }
+    }
+
+    /**
+     * 인증 실패 Handler
+     */
+    @ExceptionHandler(value = UnauthorizedTokenException.class)
+    public ResponseEntity<ApiResponse<?>> unauthorizedTokenExceptionHandler(UnauthorizedTokenException e){
+        return ResponseEntity
+            .status(e.getExceptionType().getHttpStatus())
+            .body(ApiResponse.exception(e.getExceptionType(), e.getMessage()));
+    }
+
+    /**
+     * 인가 실패 Handler
+     */
+    @ExceptionHandler(value = AuthorizationDeniedException.class)
+    public ResponseEntity<ApiResponse<?>> authorizationDeniedExceptionHandler(AuthorizationDeniedException e){
+        return ResponseEntity
+            .status(ExceptionType.FORBIDDEN_TOKEN.getHttpStatus())
+            .body(ApiResponse.exception(ExceptionType.FORBIDDEN_TOKEN));
     }
 
     /**

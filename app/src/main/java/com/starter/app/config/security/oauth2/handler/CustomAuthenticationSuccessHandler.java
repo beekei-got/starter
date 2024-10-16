@@ -1,6 +1,6 @@
 package com.starter.app.config.security.oauth2.handler;
 
-import com.starter.app.config.security.TokenProvider;
+import com.starter.app.config.security.token.TokenProvider;
 import com.starter.app.config.security.oauth2.service.CustomOAuth2User;
 import com.starter.core.domain.auth.service.AuthTokenDomainService;
 import jakarta.servlet.http.HttpServletRequest;

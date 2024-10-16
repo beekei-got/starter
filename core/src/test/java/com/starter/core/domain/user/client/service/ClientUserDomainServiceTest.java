@@ -1,14 +1,13 @@
 package com.starter.core.domain.user.client.service;
 
-import com.starter.core.domain.user.client.service.ClientUserDomainService;
-import com.starter.user.application.dto.SaveClientUserParameterDTO;
-import com.starter.user.config.payload.exception.ExceptionMessageType;
-import com.starter.user.config.payload.exception.NotAccessDataException;
-import com.starter.user.config.payload.exception.NotExistDataException;
-import com.starter.user.domain.DomainServiceTest;
-import com.starter.user.domain.user.ClientUserMock;
+import com.starter.core.config.exception.ExceptionMessageType;
+import com.starter.core.config.exception.NotAccessDataException;
+import com.starter.core.config.exception.NotExistDataException;
+import com.starter.core.domain.DomainServiceTest;
+import com.starter.core.domain.user.ClientUserMock;
 import com.starter.core.domain.user.client.ClientUser;
 import com.starter.core.domain.user.client.ClientUserRepository;
+import com.starter.core.domain.user.client.service.dto.SaveClientUserParameterDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

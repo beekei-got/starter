@@ -11,14 +11,14 @@ public enum ExceptionMessageType {
     ALREADY_ISSUED_AUTH_TOKEN("이미 발급된 인증 토큰 입니다."),
     EXPIRED_AUTH_TOKEN("이미 발급이 만료된 인증 토큰 입니다."),
 
+    UNSUPPORTED_USER_TYPE("지원하지 않는 회원유형입니다."),
     DUPLICATED_CLIENT_USER("중복된 사용자 회원입니다."),
-
     NOT_EXIST_USER("존재하지 않는 회원입니다."),
     BLOCK_USER("차단된 회원입니다."),
     RESIGN_USER("탈퇴된 회원입니다."),
     DUPLICATED_PHONE_NUMBER("중복된 휴대폰 번호 입니다."),
     DUPLICATED_CI("중복된 CI 입니다."),
-    ;
+	;
 
     private final String message;
 

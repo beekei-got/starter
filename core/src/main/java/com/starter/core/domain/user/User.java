@@ -30,29 +30,29 @@ public abstract class User extends EntityBase {
     @Enumerated(EnumType.STRING)
     @Comment("회원 유형")
     @Column(name = "user_type", length = 50, nullable = false, insertable = false, updatable = false)
-    protected UserType type;
-
-    @Comment("성명")
-    @Column(name = "name", length = 100, nullable = false)
-    protected String name;
+    protected UserType userType;
 
     @Enumerated(EnumType.STRING)
     @Comment("회원 상태")
     @Column(name = "user_status", length = 50, nullable = false)
-    protected UserStatus status;
+    protected UserStatus userStatus;
 
-    protected User(UserType type, String name) {
-        this.type = type;
-        this.name = name;
-        this.status = UserStatus.ACTIVE;
+    @Comment("성명")
+    @Column(name = "user_name", length = 100, nullable = false)
+    protected String userName;
+
+    protected User(UserType userType, String userName) {
+        this.userType = userType;
+        this.userStatus = UserStatus.ACTIVE;
+        this.userName = userName;
     }
 
     public void resign() {
-        this.status = UserStatus.RESIGN;
+        this.userStatus = UserStatus.RESIGN;
     }
 
     public void block() {
-        this.status = UserStatus.BLOCK;
+        this.userStatus = UserStatus.BLOCK;
     }
 
 }

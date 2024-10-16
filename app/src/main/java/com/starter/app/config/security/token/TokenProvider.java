@@ -1,4 +1,4 @@
-package com.starter.app.config.security;
+package com.starter.app.config.security.token;
 
 import com.starter.core.config.exception.ExpiredTokenException;
 import com.starter.core.config.exception.UnauthorizedTokenException;
@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -137,14 +138,14 @@ public class TokenProvider {
     public Collection<? extends GrantedAuthority> getAccessTokenAuthorities(String token) {
         final String authorities = String.valueOf(getClaim(token, accessTokenSecretKey).get(ROLES_CLAIM_KEY));
         return Arrays.stream(authorities.split(ROLES_CLAIM_DELIMITER))
-            .map(auth -> (GrantedAuthority) () -> auth)
+            .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }
 
     public Collection<? extends GrantedAuthority> getRefreshTokenAuthorities(String token) {
         final String authorities = String.valueOf(getClaim(token, refreshTokenSecretKey).get(ROLES_CLAIM_KEY));
         return Arrays.stream(authorities.split(ROLES_CLAIM_DELIMITER))
-            .map(auth -> (GrantedAuthority) () -> auth)
+            .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }
 
