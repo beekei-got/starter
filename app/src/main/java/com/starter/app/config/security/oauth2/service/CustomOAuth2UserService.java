@@ -1,5 +1,6 @@
 package com.starter.app.config.security.oauth2.service;
 
+import com.starter.app.config.security.token.TokenProvider;
 import com.starter.core.domain.user.Gender;
 import com.starter.app.config.security.token.TokenRole;
 import com.starter.core.domain.user.client.ClientUser;
@@ -7,6 +8,7 @@ import com.starter.core.domain.user.client.service.ClientUserDomainService;
 import com.starter.core.domain.user.client.service.dto.SaveClientUserParameterDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final ClientUserDomainService clientUserDomainService;
+    private final TokenProvider tokenProvider;
 
     @Transactional
     @Override
@@ -55,9 +58,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .phoneNumber(oAuthUserInfo.getPhoneNumber())
             .build());
 
-        Set<GrantedAuthority> authorities = Optional.of(clientUser.getUserType())
-            .map(TokenRole::userTypeOf)
-            .map(roles -> roles.stream().map(TokenRole::getAuthority).collect(Collectors.toSet()))
+        Set<SimpleGrantedAuthority> authorities = Optional.of(clientUser.getUserType())
+            .map(TokenRole::ofUserType)
+            .map(tokenRoles -> tokenRoles.stream()
+                .map(Enum::toString)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet()))
             .orElseGet(HashSet::new);
 
         Map<String, Object> additionalParameters = userRequest.getAdditionalParameters();

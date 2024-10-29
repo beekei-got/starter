@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Comment("인증토큰")
@@ -28,6 +29,10 @@ public class AuthToken extends EntityBase {
     @Column(name = "user_id", nullable = false, updatable = false)
     private Long userId;
 
+    @Comment("회원 성명")
+    @Column(name = "user_name", length = 100, nullable = false)
+    protected String userName;
+
     @Comment("AccessToken")
     @Column(name = "access_token", length = 500, nullable = false, updatable = false)
     private String accessToken;
@@ -44,6 +49,11 @@ public class AuthToken extends EntityBase {
     @Column(name = "refresh_token_expired_datetime", nullable = false, updatable = false)
     private LocalDateTime refreshTokenExpiredDatetime;
 
+    @Comment("토큰 권한")
+    @Column(name = "token_authority", length = 200, nullable = false, updatable = false)
+    @Convert(converter = AuthTokenAuthoritiesConverter.class)
+    private Set<String> authorities;
+
     @Comment("발급 만료일자")
     @Column(name = "issued_expired_datetime", nullable = false, updatable = false)
     private LocalDateTime issueExpiredDatetime;
@@ -56,24 +66,52 @@ public class AuthToken extends EntityBase {
     @Column(name = "issued_datetime", insertable = false)
     private LocalDateTime issuedDatetime;
 
-    public static AuthToken createToken(UUID authTokenId,
-                                        long userId,
-                                        String accessToken, LocalDateTime accessTokenExpiredDatetime,
-                                        String refreshToken, LocalDateTime refreshTokenExpiredDatetime,
-                                        int issueExpiredMinute) {
+    public static AuthToken createAuthToken(UUID authTokenId, long userId, String userName,
+                                            String accessToken, LocalDateTime accessTokenExpiredDatetime,
+                                            String refreshToken, LocalDateTime refreshTokenExpiredDatetime,
+                                            Set<String> authorities,
+                                            int issuedExpiredMinute) {
         return  AuthToken.builder()
             .id(authTokenId)
             .userId(userId)
+            .userName(userName)
             .accessToken(accessToken)
             .accessTokenExpiredDatetime(accessTokenExpiredDatetime)
             .refreshToken(refreshToken)
             .refreshTokenExpiredDatetime(refreshTokenExpiredDatetime)
-            .issueExpiredDatetime(LocalDateTime.now().plusMinutes(issueExpiredMinute))
+            .authorities(authorities)
+            .issueExpiredDatetime(LocalDateTime.now().plusMinutes(issuedExpiredMinute))
             .build();
     }
 
-    public boolean isExpired() {
+    public static AuthToken createIssuedAuthToken(UUID authTokenId, long userId, String userName,
+                                                  String accessToken, LocalDateTime accessTokenExpiredDatetime,
+                                                  String refreshToken, LocalDateTime refreshTokenExpiredDatetime,
+                                                  Set<String> authorities) {
+        return  AuthToken.builder()
+            .id(authTokenId)
+            .userId(userId)
+            .userName(userName)
+            .accessToken(accessToken)
+            .accessTokenExpiredDatetime(accessTokenExpiredDatetime)
+            .refreshToken(refreshToken)
+            .refreshTokenExpiredDatetime(refreshTokenExpiredDatetime)
+            .authorities(authorities)
+            .issueExpiredDatetime(LocalDateTime.now())
+            .isIssued(true)
+            .build();
+    }
+
+    public boolean isIssueExpired() {
         return this.issueExpiredDatetime.isBefore(LocalDateTime.now());
+    }
+
+    public boolean isAccessTokenExpired() {
+        return this.accessTokenExpiredDatetime.isBefore(LocalDateTime.now());
+    }
+
+    public boolean isRefreshTokenExpired() {
+        return this.refreshTokenExpiredDatetime.isBefore(LocalDateTime.now());
     }
 
     public void issue() {

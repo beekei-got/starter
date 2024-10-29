@@ -35,7 +35,7 @@ spring:
       suffix: .jsp
     pathmatch:
       matching-strategy: ant_path_matcher
-    static-path-pattern: /resources/**
+    static-path-pattern: /views/**
 
 springdoc:
   packages-to-scan: com.starter.app
@@ -52,9 +52,9 @@ springdoc:
     disable-swagger-default-url: false
   model-and-view-allowed: true
   group-configs:
-    - group: auth
+    - group: sign
       paths-to-match:
-        - /auth/**
+        - /sign/**
     - group: V1
       paths-to-match:
         - /api/v1/**

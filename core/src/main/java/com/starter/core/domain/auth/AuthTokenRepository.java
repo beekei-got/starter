@@ -6,4 +6,5 @@ import java.util.UUID;
 public interface AuthTokenRepository {
     AuthToken saveAndFlush(AuthToken authToken);
     Optional<AuthToken> findById(UUID authTokenId);
+    Optional<AuthToken> findByRefreshToken(String accessToken);
 }

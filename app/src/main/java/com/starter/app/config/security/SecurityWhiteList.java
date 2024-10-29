@@ -10,7 +10,8 @@ import java.util.Set;
 public class SecurityWhiteList {
 
     private static final List<Path> WHITE_LIST = List.of(
-        new Path("/auth/**", HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT) // 사용자 회원 로그인 페이지
+        new Path("/sign/**", HttpMethod.GET), // 서명
+        new Path("/auth/**", HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT) // 인증
 //        ,new Path("/api/v1/**", HttpMethod.GET, HttpMethod.POST) // 인증 토큰 발급
     );
 

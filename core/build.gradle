@@ -1,17 +1,14 @@
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
 apply plugin: "java-test-fixtures"
+
 dependencies {
     // db
     implementation 'mysql:mysql-connector-java:8.0.33'
 //    implementation 'com.h2database:h2:1.4.200'
-
-    // querydsl
-//    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-//    annotationProcessor "com.querydsl:querydsl-apt:5.1.0:jakarta"
-//    annotationProcessor "jakarta.persistence:jakarta.persistence-api:3.1.0"
-//    annotationProcessor "jakarta.annotation:jakarta.annotation-api:2.1.1"
 }
 
+test {
+    useJUnitPlatform()
+}
+
+bootJar { enabled = false }
+jar { enabled = true }

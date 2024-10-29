@@ -15,14 +15,16 @@ class BusinessUserTest {
 		String loginId = "admin123";
 		String password = "11111";
 		String name = "홍길동";
+		String email = "test@test.com";
 		String phoneNumber = "01012341234";
-		BusinessUser businessUser = BusinessUser.createUser(loginId, password, name, phoneNumber);
+		BusinessUser businessUser = BusinessUser.createUser(loginId, password, name, email, phoneNumber);
 
 		assertThat(businessUser.getUserType()).isEqualTo(UserType.BUSINESS);
 		assertThat(businessUser.getUserStatus()).isEqualTo(UserStatus.ACTIVE);
 		assertThat(businessUser.getLoginId()).isEqualTo(loginId);
 		assertThat(businessUser.getPassword()).isEqualTo(password);
 		assertThat(businessUser.getUserName()).isEqualTo(name);
+		assertThat(businessUser.getEmail()).isEqualTo(email);
 		assertThat(businessUser.getPhoneNumber()).isEqualTo(phoneNumber);
 	}
 

@@ -2,16 +2,16 @@ package com.starter.app.config.security.token;
 
 import com.starter.app.config.security.SecurityUtils;
 import org.aopalliance.intercept.MethodInvocation;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -24,7 +24,8 @@ public class AccessTokenRoleValidator implements AuthorizationManager<MethodInvo
 		TokenRole[] tokenRoles = invocation.getMethod().getAnnotation(AccessTokenRole.class).value();
 		if (tokenRoles.length > 0) {
 			Set<GrantedAuthority> tokenRoleAuthorities = Arrays.stream(tokenRoles)
-				.map(TokenRole::getAuthority)
+				.map(Enum::toString)
+				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toSet());
 			return new AuthorizationDecision(SecurityUtils.getAuthorities().stream().anyMatch(tokenRoleAuthorities::contains));
 		}

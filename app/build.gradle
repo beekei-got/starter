@@ -24,6 +24,9 @@ dependencies {
     // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // library
+    implementation 'com.github.beekei-got:beekei-library:1.1.1'
+
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
@@ -34,7 +37,8 @@ dependencies {
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
     implementation 'org.springframework.boot:spring-boot-devtools'
 
-    // library
-    implementation 'com.github.beekei-got:beekei-library:1.0.0'
+}
 
+test {
+    useJUnitPlatform()
 }

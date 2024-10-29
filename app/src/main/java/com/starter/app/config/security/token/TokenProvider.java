@@ -6,13 +6,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,42 +39,34 @@ public class TokenProvider {
     private final static String ROLES_CLAIM_KEY = "roles";
     private final static String ROLES_CLAIM_DELIMITER = ",";
 
-    private String issueToken(UUID id, SubjectType subjectType, Claims claims, String secretKey, long expiredTime) {
+    private String issueToken(UUID id, Claims claims, String secretKey, Date expiredDate) {
         return Jwts.builder()
             .signWith(SignatureAlgorithm.HS512, secretKey)
             .setClaims(claims)
             .setId(id.toString())
-            .setSubject(subjectType.toString())
             .setIssuer(applicationName)
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + expiredTime))
+            .setExpiration(expiredDate)
             .compact();
     }
 
-    private String createRolesClaims(Set<GrantedAuthority> authorities) {
-        return authorities.stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.joining(ROLES_CLAIM_DELIMITER));
-    }
-
-    public String issueAccessToken(UUID id, SubjectType subjectType,
-                                   long userId, String userName, Set<GrantedAuthority> authorities) {
+    public TokenDTO issueToken(UUID id, long userId, String userName, Collection<? extends GrantedAuthority> authorities) {
         Map<String, Object> claims = new HashMap<>() {{
             put(USER_ID_CLAIM_KEY, userId);
             put(USER_NAME_CLAIM_KEY, userName);
-            put(ROLES_CLAIM_KEY, createRolesClaims(authorities));
+            put(ROLES_CLAIM_KEY, authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(ROLES_CLAIM_DELIMITER)));
         }};
-        return issueToken(id, subjectType, Jwts.claims(claims), accessTokenSecretKey, accessTokenExpiredTime);
-    }
 
-    public String issueRefreshToken(UUID id, SubjectType subjectType,
-                                    long userId, String userName, Set<GrantedAuthority> authorities) {
-        Map<String, Object> claims = new HashMap<>() {{
-            put(USER_ID_CLAIM_KEY, userId);
-            put(USER_NAME_CLAIM_KEY, userName);
-            put(ROLES_CLAIM_KEY, createRolesClaims(authorities));
-        }};
-        return issueToken(id, subjectType, Jwts.claims(claims), refreshTokenSecretKey, refreshTokenExpiredTime);
+        Date accessTokenExpiredDate = new Date(System.currentTimeMillis() + accessTokenExpiredTime);
+        String accessToken = issueToken(id, Jwts.claims(claims), accessTokenSecretKey, accessTokenExpiredDate);
+        Date refreshTokenExpiredDate = new Date(System.currentTimeMillis() + refreshTokenExpiredTime);
+        String refreshToken = issueToken(id, Jwts.claims(claims), refreshTokenSecretKey, refreshTokenExpiredDate);
+
+        LocalDateTime accessTokenExpiredDatetime = new Timestamp(accessTokenExpiredDate.getTime()).toLocalDateTime();
+        LocalDateTime refreshTokenExpiredDatetime = new Timestamp(refreshTokenExpiredDate.getTime()).toLocalDateTime();
+        return new TokenDTO(accessToken, accessTokenExpiredDatetime, refreshToken, refreshTokenExpiredDatetime);
     }
 
     private Boolean validateToken(String token, String secretKey) throws ExpiredTokenException, UnauthorizedTokenException {
@@ -107,34 +98,6 @@ public class TokenProvider {
             .orElse(null);
     }
 
-    public Long getRefreshTokenId(String token) {
-        return Optional.ofNullable(getClaim(token, refreshTokenSecretKey).get(USER_ID_CLAIM_KEY))
-            .map(userId -> Long.valueOf(String.valueOf(userId)))
-            .orElse(null);
-    }
-
-    public SubjectType getAccessTokenType(String token) {
-        return Optional.ofNullable(getClaim(token, accessTokenSecretKey).getSubject())
-            .map(SubjectType::valueOf)
-            .orElse(null);
-    }
-
-    public SubjectType getRefreshTokenType(String token) {
-        return Optional.ofNullable(getClaim(token, refreshTokenSecretKey).getSubject())
-            .map(SubjectType::valueOf)
-            .orElse(null);
-    }
-
-    public LocalDateTime getAccessTokenExpiredDatetime(String token) {
-        final Date expiredDate = getClaim(token, accessTokenSecretKey).getExpiration();
-        return new java.sql.Timestamp(expiredDate.getTime()).toLocalDateTime();
-    }
-
-    public LocalDateTime getRefreshTokenExpiredDatetime(String token) {
-        final Date expiredDate = getClaim(token, refreshTokenSecretKey).getExpiration();
-        return new java.sql.Timestamp(expiredDate.getTime()).toLocalDateTime();
-    }
-
     public Collection<? extends GrantedAuthority> getAccessTokenAuthorities(String token) {
         final String authorities = String.valueOf(getClaim(token, accessTokenSecretKey).get(ROLES_CLAIM_KEY));
         return Arrays.stream(authorities.split(ROLES_CLAIM_DELIMITER))
@@ -147,18 +110,6 @@ public class TokenProvider {
         return Arrays.stream(authorities.split(ROLES_CLAIM_DELIMITER))
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public enum SubjectType {
-
-        GUEST_TOKEN("게스트 토큰"),
-        CLIENT_USER_TOKEN("사용자 회원 토큰"),
-        ADMIN_USER_TOKEN("관리자 회원 토큰");
-
-        private final String name;
-
     }
 
 }

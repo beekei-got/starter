@@ -1,5 +1,6 @@
 package com.starter.app.config.security;
 
+import com.starter.app.application.AuthTokenServiceV1;
 import com.starter.app.config.security.filter.TokenAuthenticationFilter;
 import com.starter.app.config.security.handler.TokenAccessDeniedHandler;
 import com.starter.app.config.security.handler.TokenUnauthorizedHandler;
@@ -10,7 +11,6 @@ import com.starter.app.config.security.oauth2.handler.CustomAuthenticationSucces
 import com.starter.app.config.security.oauth2.service.CustomOAuth2UserService;
 import com.starter.app.config.security.token.AccessTokenRoleValidator;
 import com.starter.app.config.security.token.TokenProvider;
-import com.starter.app.config.security.token.TokenRole;
 import com.starter.core.domain.auth.service.AuthTokenDomainService;
 import com.starter.core.domain.user.client.service.ClientUserDomainService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -35,9 +38,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final ClientRegistrationRepository clientRegistrationRepository;
-    private final TokenProvider tokenProvider;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final AuthTokenDomainService authTokenDomainService;
+    private final AuthTokenServiceV1 authTokenServiceV1;
+    private final TokenProvider tokenProvider;
     private final ClientUserDomainService clientUserDomainService;
 
     @Bean
@@ -47,13 +50,14 @@ public class SecurityConfig {
             "classpath:/static/**",
             "classpath:/resources/**",
             "classpath:/META-INF/**",
+            "/static/**",
             "/resources/**",
-            "/favicon.ico",
+            "/WEB-INF/**",
             "/BOOT-INF/**",
+            "/favicon.ico",
             "/api/docs",
             "/api/docs/**",
-            "/api/swagger-ui/**",
-            "/WEB-INF/**"
+            "/api/swagger-ui/**"
         );
     }
 
@@ -85,7 +89,7 @@ public class SecurityConfig {
                         new CustomAuthorizationRequestResolver(this.clientRegistrationRepository)))
                 .tokenEndpoint(config ->
                     config.accessTokenResponseClient(new CustomOAuth2AccessTokenResponseClient()))
-                .successHandler(new CustomAuthenticationSuccessHandler(this.tokenProvider, this.authTokenDomainService))
+                .successHandler(new CustomAuthenticationSuccessHandler(this.authTokenServiceV1))
                 .failureHandler(new CustomAuthenticationFailureHandler())
                 .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(this.customOAuth2UserService)))
             .authorizeHttpRequests(ar -> ar

@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,7 +19,7 @@ public class CustomOAuth2User implements OAuth2User, Serializable {
 
     private final long id;
     private final String email;
-    private final Set<GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
     private final String registrationId;
     private final Map<String, Object> attributes;
     private final Map<String, Object> additionalParameters;
@@ -28,7 +30,7 @@ public class CustomOAuth2User implements OAuth2User, Serializable {
     }
 
     @Override
-    public Set<GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
     }
 

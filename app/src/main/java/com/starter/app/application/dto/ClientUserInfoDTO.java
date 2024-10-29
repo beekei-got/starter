@@ -1,6 +1,6 @@
 package com.starter.app.application.dto;
 
-import com.beekei.library.querydslBuilder.dto.QuerydslSelectDTO;
+import com.beekei.library.querydslBuilder.QuerydslSelectDTO;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.starter.core.domain.user.Gender;

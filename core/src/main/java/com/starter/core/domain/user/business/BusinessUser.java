@@ -28,19 +28,24 @@ public class BusinessUser extends User {
 	@Column(name = "password", length = 300, nullable = false)
 	private String password;
 
+	@Comment("이메일")
+	@Column(name = "email", length = 150, nullable = false)
+	private String email;
+
 	@Comment("휴대폰번호")
 	@Column(name = "phone_number", length = 20, nullable = false)
 	private String phoneNumber;
 
-	private BusinessUser(String loginId, String password, String name, String phoneNumber) {
+	private BusinessUser(String loginId, String password, String name, String email, String phoneNumber) {
 		super(UserType.BUSINESS, name);
 		this.loginId = loginId;
 		this.password = password;
+		this.email = email;
 		this.phoneNumber = phoneNumber;
 	}
 
-	public static BusinessUser createUser(String loginId, String password, String name, String phoneNumber) {
-		return new BusinessUser(loginId, password, name, phoneNumber);
+	public static BusinessUser createUser(String loginId, String password, String name, String email, String phoneNumber) {
+		return new BusinessUser(loginId, password, name, email, phoneNumber);
 	}
 
 }
