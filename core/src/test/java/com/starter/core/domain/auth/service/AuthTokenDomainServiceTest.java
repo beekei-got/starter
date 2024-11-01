@@ -1,7 +1,7 @@
 package com.starter.core.domain.auth.service;
 
+import com.beekei.library.mockTest.DomainServiceTest;
 import com.starter.core.config.exception.*;
-import com.starter.core.domain.DomainServiceTest;
 import com.starter.core.domain.auth.AuthToken;
 import com.starter.core.domain.auth.AuthTokenMock;
 import com.starter.core.domain.auth.AuthTokenRepository;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 
 class AuthTokenDomainServiceTest extends DomainServiceTest {
 
-    @SpyBean
+    @MockBean
     @InjectMocks
     private AuthTokenDomainService authTokenDomainService;
 

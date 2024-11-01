@@ -13,6 +13,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @Configuration
 public class LibraryConfig {
 
+	public static final String API_VERSION_PREFIX = "api/v";
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -26,7 +28,7 @@ public class LibraryConfig {
 		return new WebMvcRegistrations() {
 			@Override
 			public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-				return new ApiVersionRequestMappingHandlerMapping("api", "v");
+				return new ApiVersionRequestMappingHandlerMapping(API_VERSION_PREFIX);
 			}
 		};
 	}

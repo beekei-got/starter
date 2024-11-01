@@ -1,9 +1,9 @@
 package com.starter.core.domain.user.client.service;
 
+import com.beekei.library.mockTest.DomainServiceTest;
 import com.starter.core.config.exception.ExceptionMessageType;
 import com.starter.core.config.exception.NotAccessDataException;
 import com.starter.core.config.exception.NotExistDataException;
-import com.starter.core.domain.DomainServiceTest;
 import com.starter.core.domain.user.ClientUserMock;
 import com.starter.core.domain.user.client.ClientUser;
 import com.starter.core.domain.user.client.ClientUserRepository;

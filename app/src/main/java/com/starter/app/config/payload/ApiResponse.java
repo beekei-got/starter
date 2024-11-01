@@ -12,28 +12,26 @@ import java.util.Optional;
 @Builder(access = AccessLevel.PRIVATE)
 public class ApiResponse<D> {
 
-    private static final String SUCCESS_CODE = "20000";
-    private static final String SUCCESS_MESSAGE = "API 호출 성공";
+    public static final String SUCCESS_CODE = "20000";
+    public static final String SUCCESS_MESSAGE = "API 호출 성공";
 
-    private String responseCode;
-
-    private String responseMessage;
-
+    private String resultCode;
+    private String resultMessage;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private D responseData;
+    private D resultData;
 
     public static ApiResponse<?> success() {
         return ApiResponse.builder()
-            .responseCode(SUCCESS_CODE)
-            .responseMessage(SUCCESS_MESSAGE)
+            .resultCode(SUCCESS_CODE)
+            .resultMessage(SUCCESS_MESSAGE)
             .build();
     }
 
     public static <D> ApiResponse<D> success(D responseData) {
         return ApiResponse.<D>builder()
-            .responseCode(SUCCESS_CODE)
-            .responseMessage(SUCCESS_MESSAGE)
-            .responseData(responseData)
+            .resultCode(SUCCESS_CODE)
+            .resultMessage(SUCCESS_MESSAGE)
+            .resultData(responseData)
             .build();
     }
 
@@ -43,8 +41,8 @@ public class ApiResponse<D> {
 
     public static ApiResponse<?> exception(ExceptionType responseType, String responseMessage) {
         return ApiResponse.builder()
-            .responseCode(responseType.getCode())
-            .responseMessage(Optional.ofNullable(responseMessage).orElse(responseType.getMessage()))
+            .resultCode(responseType.getCode())
+            .resultMessage(Optional.ofNullable(responseMessage).orElse(responseType.getMessage()))
             .build();
     }
 

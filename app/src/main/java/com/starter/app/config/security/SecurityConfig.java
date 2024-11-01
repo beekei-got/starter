@@ -73,8 +73,9 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
     @Bean
-    public Advisor preAuthorize(AccessTokenRoleValidator accessTokenRoleValidator) { //2
+    public Advisor preAuthorize(AccessTokenRoleValidator accessTokenRoleValidator) {
         return AuthorizationManagerBeforeMethodInterceptor.preAuthorize(accessTokenRoleValidator);
     }
 
@@ -97,7 +98,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, SecurityWhiteList.getWhitelistByMethod(HttpMethod.POST)).permitAll()
                 .requestMatchers(HttpMethod.PUT, SecurityWhiteList.getWhitelistByMethod(HttpMethod.PUT)).permitAll()
                 .requestMatchers(HttpMethod.DELETE, SecurityWhiteList.getWhitelistByMethod(HttpMethod.DELETE)).permitAll()
-//                .anyRequest().hasAnyRole(TokenRole.CLIENT_USER.getRole(), TokenRole.BUSINESS_USER.getRole())
                 .anyRequest().authenticated())
             .exceptionHandling(handling -> handling
                 .authenticationEntryPoint(new TokenUnauthorizedHandler())

@@ -1,9 +1,20 @@
 apply plugin: "java-test-fixtures"
 
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://jitpack.io")
+    }
+}
+
+
 dependencies {
     // db
     implementation 'mysql:mysql-connector-java:8.0.33'
 //    implementation 'com.h2database:h2:1.4.200'
+
+    // library
+    implementation 'com.github.beekei-got:beekei-library:1.2.4'
 }
 
 test {

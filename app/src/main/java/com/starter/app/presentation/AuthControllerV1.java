@@ -35,7 +35,7 @@ public class AuthControllerV1 {
 	@Operation(summary = "인증토큰 재발급", description = "AccessToken 만료 후 인증토큰을 재발급합니다.")
 	@PutMapping(name = "인증토큰 재발급", value = "token", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ApiResponse<ReissueAuthTokenResponse> reissueAuthToken(@RequestBody @Valid ReissueAuthTokenRequest request) {
-		AuthTokenDTO authToken = authTokenServiceV1.reissueAuthToken(request.getAccessToken());
+		AuthTokenDTO authToken = authTokenServiceV1.reissueAuthToken(request.getRefreshToken());
 		return ApiResponse.success(new ReissueAuthTokenResponse(authToken));
 	}
 

@@ -1,9 +1,9 @@
 package com.starter.core.domain.user.admin.service;
 
+import com.beekei.library.mockTest.DomainServiceTest;
 import com.starter.core.config.exception.ExceptionMessageType;
 import com.starter.core.config.exception.NotAccessDataException;
 import com.starter.core.config.exception.NotExistDataException;
-import com.starter.core.domain.DomainServiceTest;
 import com.starter.core.domain.user.AdminUserMock;
 import com.starter.core.domain.user.admin.AdminUser;
 import com.starter.core.domain.user.admin.AdminUserRepository;
